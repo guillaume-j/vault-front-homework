@@ -1,22 +1,25 @@
 {
     "extends": [
-      "eslint:recommended",
+      "airbnb",
+      "airbnb-typescript",
+      "airbnb/hooks",
       "plugin:react/recommended",
-      "plugin:react-hooks/recommended"
+      "plugin:@typescript-eslint/recommended"
     ],
-    "plugins": ["react", "react-hooks"],
+    "ignorePatterns": ["*.config.*"],
+    "plugins": ["react", "@typescript-eslint" ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
       "ecmaVersion": 2020,
       "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true
-      }
+      "project": "./tsconfig.json"
     },
     "env": {
       "browser": true,
       "es2020": true
     },
     "rules": {
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-props-no-spreading": "off"
     }
   }
