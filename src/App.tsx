@@ -1,29 +1,18 @@
 import { useEffect, useState } from 'react';
 import TextInput from './components/TextInput';
+import TransactionNotification from './components/notifications/TransactionNotification';
+import { AccountNotificationData, TransactionNotificationData } from './type/NotificationType';
+import AccountNotification from './components/notifications/AccountNotification';
 
 const API = 'http://localhost:5000';
 
-interface TransactionNotificationData {
-  amout: number;
-  from: string;
-  id: number;
-  to: string;
-  unit: string;
-}
-
-interface AccountNotificationData {
-  currency: string;
-  id: number;
-  name: string;
-}
-
 type NotifData = {
-  TRANSACTION_SEND: TransactionNotificationData;
+  TRANSACTION_SENT: TransactionNotificationData;
   TRANSACTION_RECEIVED: TransactionNotificationData;
   ACCOUNT_CREATED: AccountNotificationData;
 };
 
-type NotifType = 'TRANSACTION_SEND' | 'TRANSACTION_RECEIVED' | 'ACCOUNT_CREATED';
+type NotifType = 'TRANSACTION_SENT' | 'TRANSACTION_RECEIVED' | 'ACCOUNT_CREATED';
 
 type Notif<T extends NotifType> = {
   id: string;
@@ -31,7 +20,7 @@ type Notif<T extends NotifType> = {
   data: NotifData[T];
 };
 
-type PossibleNotifType = Notif<'TRANSACTION_SEND' | 'TRANSACTION_RECEIVED'> | Notif<'ACCOUNT_CREATED'>;
+type PossibleNotifType = Notif<'TRANSACTION_SENT' | 'TRANSACTION_RECEIVED'> | Notif<'ACCOUNT_CREATED'>;
 
 function App() {
   const [searchText, setSearchText] = useState('');
@@ -58,6 +47,7 @@ function App() {
   return (
     <div>
       <TextInput value={searchText} onChange={setSearchText} placeholder="Type to filter events" />
+      <div style={{ height: '100px' }} />
       {isLoading ? (
         <div>Loading...</div>
       ) : (
@@ -66,21 +56,12 @@ function App() {
             if (r.type === 'ACCOUNT_CREATED') {
               const data = r.data as AccountNotificationData;
               return (
-                <div className="border flex flex-row place-content-around" key={r.id}>
-                  <p>{data.name}</p>
-                  <p>{data.currency}</p>
-                  <p>{data.id}</p>
-                </div>
+                <AccountNotification data={data} key={r.id} />
               );
             }
             const data = r.data as TransactionNotificationData;
             return (
-              <div className="border flex flex-row place-content-around" key={r.id}>
-                <p>{data.amout}</p>
-                <p>{data.from}</p>
-                <p>{data.to}</p>
-                <p>{data.unit}</p>
-              </div>
+              <TransactionNotification data={data} type={r.type} key={r.id} />
             );
           })}
         </div>
