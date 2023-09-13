@@ -27,12 +27,12 @@ const dataMapping: DataMapping = {
 export default function TransactionNotification(props: TransactionNotificationProps) {
   const { data, type } = props;
   return (
-    <div className="border flex flex-row" style={{ margin: 10, padding: 10 }}>
-      <img src={dataMapping[type].svgComponent} alt="Green Dot" style={{ width: 20, height: 20 }} />
-      <div style={{ width: '5%' }} />
-      <p style={{ width: '20%' }}>{dataMapping[type].wordingAction}</p>
-      <p style={{ width: '20%' }}>{`${data.amount} ${data.unit}`}</p>
-      <p style={{ width: '20%' }}>{dataMapping[type].wordingDirection}</p>
+    <div className="border flex flex-row bg-[#d3d3d32e] m-[10px] p-[10px]">
+      <img className="w-[20px] h-[20px]" src={dataMapping[type].svgComponent} alt="Green Dot" />
+      <div className="w-[5%]" />
+      <p className="w-[20%]">{dataMapping[type].wordingAction}</p>
+      <p className="w-[20%]">{`${data.amount} ${data.unit}`}</p>
+      <p className="w-[20%]">{dataMapping[type].wordingDirection}</p>
       <p>{data[`${dataMapping[type].wordingDirection}`]}</p>
     </div>
   );

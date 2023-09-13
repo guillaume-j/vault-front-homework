@@ -8,10 +8,10 @@ interface AccountNotificationProps {
 export default function AccountNotification(props: AccountNotificationProps) {
   const { data } = props;
   return (
-    <div className="border flex flex-row" style={{ margin: 10, padding: 10 }}>
-      <img src={AccountCreatedImg} alt="Green Dot" style={{ width: 20, height: 20 }} />
-      <div style={{ width: '5%' }} />
-      <p>{`${data.currency} Account ${data.name} created`}</p>
+    <div className="border flex flex-row bg-[#d3d3d32e] m-[10px] p-[10px]">
+      <img className="w-[20px] h-[20px]" src={AccountCreatedImg} alt="Green Dot" />
+      <div className="w-[5%]" />
+      <p>{`${data.currency} account ${data.name} created`}</p>
     </div>
   );
 }

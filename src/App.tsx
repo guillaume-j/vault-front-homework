@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import TextInput from './components/TextInput';
+import AccountNotification from './components/notifications/AccountNotification';
 import TransactionNotification from './components/notifications/TransactionNotification';
 import { AccountNotificationData, TransactionNotificationData } from './type/NotificationType';
-import AccountNotification from './components/notifications/AccountNotification';
+
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const API = 'http://localhost:5000';
 
@@ -22,22 +25,27 @@ type Notif<T extends NotifType> = {
 
 type PossibleNotifType = Notif<'TRANSACTION_SENT' | 'TRANSACTION_RECEIVED'> | Notif<'ACCOUNT_CREATED'>;
 
+const NO_MATCH_STRING = 'Aucun résultat trouvé pour votre recherche.';
+const ERROR_STRING = 'Une erreur est survenue. Veuillez tenter une nouvelle recherche.';
+
 function App() {
   const [searchText, setSearchText] = useState('');
   const [isLoading, setLoading] = useState(false);
-  // eslint-disable-next-line no-spaced-func
   const [results, setResults] = useState<null | PossibleNotifType[]>(null);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const effect = async () => {
       setLoading(true);
+      setResults(null);
+      setError(false);
 
       try {
         const res = await fetch(`${API}/search?q=${searchText}`);
         const data = await res.json();
         setResults(data);
       } catch (e) {
-        console.log(e);
+        setError(true);
       }
       setLoading(false);
     };
@@ -47,9 +55,9 @@ function App() {
   return (
     <div>
       <TextInput value={searchText} onChange={setSearchText} placeholder="Type to filter events" />
-      <div style={{ height: '100px' }} />
+      <div className="h-[100px]" />
       {isLoading ? (
-        <div>Loading...</div>
+        <Skeleton className="h-[45px]" count={5} />
       ) : (
         <div>
           {results?.map((r) => {
@@ -64,6 +72,8 @@ function App() {
               <TransactionNotification data={data} type={r.type} key={r.id} />
             );
           })}
+          {results !== null && results?.length === 0 && <p>{NO_MATCH_STRING}</p>}
+          {error === true && <p>{ERROR_STRING}</p>}
         </div>
       )}
     </div>
